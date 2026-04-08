@@ -1,4 +1,4 @@
-"""booking-api – punto de entrada HTTP para reservas de hotel."""
+"""booking-api - punto de entrada HTTP para reservas de hotel."""
 
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ from .schemas import BookingCreated, BookingIn, BookingStatus
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(levelname)s %(message)s")
 logger = logging.getLogger("booking-api")
 
-app = FastAPI(title="HotelBook – Booking API")
+app = FastAPI(title="HotelBook - Booking API")
 
 
 @app.post("/bookings", response_model=BookingCreated, status_code=202)
@@ -32,26 +32,32 @@ async def create_booking(body: BookingIn):
     logger.info("Nueva reserva %s para %s", booking_id, body.guest)
 
     r = get_redis()
-    await r.hset(
-        f"booking:{booking_id}",
-        mapping={"status": "REQUESTED", "last_update": now},
-    )
+    try:
+        await r.hset(
+            f"booking:{booking_id}",
+            mapping={"status": "REQUESTED", "last_update": now},
+        )
 
-    payload = {
-        "booking_id": booking_id,
-        "guest": body.guest,
-        "room_type": body.room_type,
-        "check_in": body.check_in.isoformat(),
-        "check_out": body.check_out.isoformat(),
-    }
+        payload = {
+            "booking_id": booking_id,
+            "guest": body.guest,
+            "room_type": body.room_type,
+            "check_in": body.check_in.isoformat(),
+            "check_out": body.check_out.isoformat(),
+        }
 
-    # BUG: maneja el fallo del publish. Si RabbitMQ está caído, el cliente
-    # recibe un 202 OK aunque el evento nunca salió. Debes envolver esto en
-    # try/except, loggear el error, y devolver 503 al cliente.
-    await publish_booking(payload)
+        try:
+            await publish_booking(payload)
+        except Exception:
+            logger.exception("Fallo al publicar la reserva %s en RabbitMQ", booking_id)
+            raise HTTPException(
+                status_code=503,
+                detail="No se pudo procesar la reserva en este momento. Intenta de nuevo.",
+            )
 
-    await r.aclose()
-    return BookingCreated(booking_id=booking_id, status="REQUESTED")
+        return BookingCreated(booking_id=booking_id, status="REQUESTED")
+    finally:
+        await r.aclose()
 
 
 @app.get("/bookings/{booking_id}", response_model=BookingStatus)
