@@ -4,17 +4,17 @@
 
 ## Integrante 1
 
-- **Nombre completo:**
-- **Matrícula:**
-- **Correo:**
-- **Usuario de Git que va a usar para sus commits:**
+- **Nombre completo:Anton Betak Licea**
+- **Matrícula:190071**
+- **Correo:anton.betak@iberopuebla.mx**
+- **Usuario de Git que va a usar para sus commits:antonbetak**
 
 ## Integrante 2
 
-- **Nombre completo:**
-- **Matrícula:**
-- **Correo:**
-- **Usuario de Git que va a usar para sus commits:**
+- **Nombre completo:Roberto Villegas Ojeda**
+- **Matrícula:190013**
+- **Correo:190013@iberopuebla.mx**
+- **Usuario de Git que va a usar para sus commits:JEETVP**
 
 ---
 
@@ -24,7 +24,7 @@
 
 | Bug / Tarea | Responsable principal | Apoyo |
 |---|---|---|
-| B1 — routing key en booking-api | | |
+| B1 — routing key en booking-api |Anton | Roberto|
 | B2 — manejo de error en publish | | |
 | B3 — auto_ack en availability-service | | |
 | B4 — overlap de fechas | | |
