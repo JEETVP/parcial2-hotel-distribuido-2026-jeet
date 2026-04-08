@@ -97,9 +97,11 @@ def callback(ch, method, properties, body):
             body=json.dumps(event).encode(),
             properties=pika.BasicProperties(content_type="application/json"),
         )
+        ch.basic_ack(delivery_tag=method.delivery_tag)
         logger.info("Publicado %s para %s", routing_key, booking_id)
     except Exception as exc:
         logger.error("Error procesando %s: %s", booking_id, exc)
+        ch.basic_nack(delivery_tag=method.delivery_tag, requeue=True)
 
 
 def main() -> None:
@@ -118,7 +120,7 @@ def main() -> None:
     channel.basic_consume(
         queue=result.method.queue,
         on_message_callback=callback,
-        auto_ack=True,
+        auto_ack=False,
     )
     logger.info("availability-service esperando booking.requested...")
     channel.start_consuming()

@@ -21,6 +21,11 @@ Era un problema por que availability-service no recibia el mensaje y no procesab
 ---
 
 ### B3 — Ack manual
+Encontramos que availability-service confirmaba el mensaje demasiado pronto y podia perderlo si fallaba
+
+Se solucionó cambiando el consumer a confirmación manual usando auto_ack=false y haciendo ack solo al terminar bien
+
+Era un problema porque si el servicio fallaba mientras procesaba, el mensaje ya estaba marcado como recibido y se perdia
 
 ---
 
