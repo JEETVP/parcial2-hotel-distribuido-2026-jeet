@@ -7,11 +7,12 @@
 ## Bugs arreglados (Tier 1)
 
 ### B1 — Routing key
-**Qué encontré:**
+Encontramos que el booking-api enviaba la reserva con un nombre de ruta incorrecto
 
-**Cómo lo arreglé:**
+cambie la ruta, en vez de "booking 
+.create" pusimos "booking.requested"
 
-**Por qué esto era un problema:**
+Era un problema por que availability-service no recibia el mensaje y no procesaba la reserva
 
 ---
 
