@@ -63,10 +63,28 @@ Es un problema por qué al tener la URL de base de datos, se puede generar acces
 ## Bugs arreglados (Tier 2)
 
 ### B4 — Overlap de fechas
+Qué encontré:
+Encontramos que availability-service no detectaba correctamente cuando dos reservas se traslapaban en sus fechas
+
+Cómo lo arregle:
+Se corrigió la consulta para validar el solapamiento usando la condición completa entre check in y check out
+
+Por qué esto era un problema:
+Porque el sistema podia aceptar 2 reservas para la misma habitación en fechas que se encimaban
+
 
 ### B5 — Race condition con `with_for_update()`
 
 ### B7 — Idempotencia
+
+Qué encontré:
+Encontramos que payment-service podia procesar dos veces el mismo evento y generar cobros duplicados
+
+Cómo lo arregle:
+Se agregó un registro de eventos procesados para que se detecten antes de ser cobrados 
+
+Por qué esto era un problema:
+Porque si se reenviaba un mensaje, el sistema podia cobrar más de una vez la misma reserva
 
 ---
 

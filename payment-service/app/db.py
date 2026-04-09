@@ -32,6 +32,12 @@ class Payment(Base):
     status: Mapped[str] = mapped_column(String(20), nullable=False)
 
 
+class ProcessedEvent(Base):
+    __tablename__ = "processed_events"
+
+    event_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+
+
 engine = create_async_engine(DATABASE_URL, echo=False)
 SessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 

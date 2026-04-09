@@ -37,6 +37,17 @@ Listen los 3-5 prompts más importantes que escribieron y para qué los usaron.
    **Quién lo usó:** Anton Betak Licea
    **Qué tan útil fue:** 4
 
+3. **Prompt: como puedo manejar eventos repetidot en payment-service para evitar cobros duplicados? **
+**Para qué: Aclarar la idea idea de idempotencia antes de implementarla en el código y entender como podria plasmarlo a código con algunos ejemplos dados**
+**Quien lo usó:**Anton Betak Licea
+**Qué tan útil fue:** 5
+
+4. **Prompt: Le pregunte por que las pruebas en terminal no me estaban saliendo y qué ejemplos de datos podia usar para comprobar que los cambios si funcionaban **
+**Para qué: Resolver el problema al probar con docker y contar con casos concretos para validar que se hayan efectuado bien los cambios**
+**Quien lo usó:**Anton Betak Licea
+**Qué tan útil fue:** 4
+
+
 ### ¿En qué partes los apoyó?
 (Ej: explicación de `with_for_update()`, generación de boilerplate del notification-service, debugging de un error de aio-pika...)
 
