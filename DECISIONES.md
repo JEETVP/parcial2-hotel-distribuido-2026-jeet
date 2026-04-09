@@ -100,8 +100,20 @@ Porque si se reenviaba un mensaje, el sistema podia cobrar más de una vez la mi
 ---
 
 ## Bonus que implementé (si aplica)
+SAGA COMPENSATORIA
 
----
+QUE ENCONTRE:
+En availability-service, no podíamos revertir o cancelar cuando teníamos una reserva ya creada
+En payment-service como solo había una routing key, solo se podía construir el evento de éxito o fallo en el pago.
+
+QUE HICE:
+En availability-service, añadimos la función cancel_booking en la cual en una sesión de base de datos, se realiza una query, en la que si muestra un estado diferente a cancelado, automáticamente cambia el status a cancelado, ahora puede revisar con el callback que tipo de evento esta procesando, reserva o cancelación, por lo que si recibe la routing key de booking.cancelled la manda como cancelación.Para esto fue necesaria añadir otro binding para escuchar en ambos casos
+
+En payment-service, si el caso entra en el if not success, se añade la routing key de booking cancelled, y se devuleve un json con el evento de BOOKING_CANCELLED
+
+POR QUE ERA UN PROBLEMA:
+
+No es un problema, pero limita la experiencia del usuario a solo una opción, y no es tolerante a errores que pueda cometer, por lo que poder revertir el proceso representa un plus en caso de que haya un error. Y en el pago, permite que la reserva pase a cancelada y no solo avise si el pago paso o no, permitiendo una funcionalidad mas completa.
 
 ## Cosas que decidí NO hacer
 
