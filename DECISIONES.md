@@ -75,6 +75,17 @@ Porque el sistema podia aceptar 2 reservas para la misma habitación en fechas q
 
 ### B5 — Race condition con `with_for_update()`
 
+Qué encontré:
+
+El codigo realizaba dos sesiones distintas para acceder a la base de datos, por lo qué la validación de disponibilidad y la inserción a base de datos no estarían protegidos y fallarían haciendo qué varios puedan ver un falso disponible en una habitación en caso de qué haya accesos concurrentes.
+
+Cómo lo arreglé:
+Unificamos las dos sesiones para tener el SELECT e INSERT en una sola, y añadimos el with_for_update para bloquear hasta que se complete la transacción, haciendo que el acceso sea serializado para reservas existentes validando con las que esten disponibles al mismo tiempo. También incluye reintentos y muestra trazabilidad con exepción que genera el reintento, mandando el ACK hasta después de publicar.
+
+Por qué esto era un problema:
+Era un problema por que la operación no estaba contenida en una sola, y no protegía los datos al momento de insertarlos, lo que generaba que al haber procesos concurrentes, se pudieran crear reservas duplicadas.
+
+
 ### B7 — Idempotencia
 
 Qué encontré:
