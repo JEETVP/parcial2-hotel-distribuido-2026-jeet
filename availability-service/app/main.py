@@ -70,12 +70,26 @@ def process_booking(payload: dict) -> tuple[bool, str, int | None]:
         return True, "", room.id
 
 
+def cancel_booking(payload: dict) -> None:
+    with SessionLocal() as session:
+        booking = session.query(Booking).filter(Booking.booking_id == payload["booking_id"]).first()
+        if booking and booking.status != "CANCELLED":
+            booking.status = "CANCELLED"
+            session.commit()
+            logger.info("Reserva %s cancelada y habitacion liberada", payload["booking_id"])
+
+
 def callback(ch, method, properties, body):
     payload = json.loads(body)
     booking_id = payload["booking_id"]
-    logger.info("Recibido booking.requested: %s", booking_id)
+    logger.info("Recibido %s: %s", method.routing_key, booking_id)
 
     try:
+        if method.routing_key == "booking.cancelled":
+            cancel_booking(payload)
+            ch.basic_ack(delivery_tag=method.delivery_tag)
+            return
+
         success, reason, room_id = process_booking(payload)
         if success:
             event = {**payload, "event": "BOOKING_CONFIRMED", "room_id": room_id}
@@ -105,17 +119,14 @@ def main() -> None:
     channel.exchange_declare(exchange="hotel", exchange_type="topic")
     result = channel.queue_declare(queue="availability.requests", durable=False)
     channel.queue_bind(exchange="hotel", queue=result.method.queue, routing_key="booking.requested")
+    channel.queue_bind(exchange="hotel", queue=result.method.queue, routing_key="booking.cancelled")
 
-    # BUG: ack incorrecto. Con auto_ack=True, RabbitMQ marca el mensaje como
-    # entregado ANTES de que el callback corra. Si crashea a la mitad, el
-    # mensaje se pierde. Cambia a auto_ack=False y haz ch.basic_ack(delivery_tag=...)
-    # manualmente al final del callback (o basic_nack en caso de error).
     channel.basic_consume(
         queue=result.method.queue,
         on_message_callback=callback,
         auto_ack=False,
     )
-    logger.info("availability-service esperando booking.requested...")
+    logger.info("availability-service esperando booking.requested y booking.cancelled...")
     channel.start_consuming()
 
 

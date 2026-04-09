@@ -88,6 +88,14 @@ async def callback(message: aio_pika.IncomingMessage) -> None:
                 aio_pika.Message(body=json.dumps(event).encode(), content_type="application/json"),
                 routing_key=routing_key,
             )
+            if not success:
+                await exchange.publish(
+                    aio_pika.Message(
+                        body=json.dumps({**payload, "event": "BOOKING_CANCELLED", "reason": reason}).encode(),
+                        content_type="application/json",
+                    ),
+                    routing_key="booking.cancelled",
+                )
             logger.info("Publicado %s para %s", routing_key, booking_id)
 
 
