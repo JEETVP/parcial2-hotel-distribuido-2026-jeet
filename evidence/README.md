@@ -12,10 +12,20 @@ Suban aquí los siguientes archivos. Sin esta evidencia se pierden puntos de la 
 - `rabbitmq-bindings.png` — captura de los bindings de la queue `notifications` (debe mostrar los dos routing keys: `payment.completed` y `payment.failed`)
 
 ### 2. Logs del flujo end-to-end exitoso
-- `flujo-completo.log` — salida de `docker compose logs` filtrada al hacer un `POST /bookings` exitoso, mostrando los 4 servicios procesando en cadena
+- `flujo-completo.log` — salida de `docker compose logs` al hacer un `POST /bookings`, mostrando los 4 servicios procesando en cadena
+- `servicios.png` — captura del flujo completo entre `booking-api`, `availability-service`, `payment-service` y `notification-service`
+
+![Flujo end-to-end](./servicios.png)
+
 
 ### 3. Ejemplo de curl
-- `curl-ejemplos.md` — los comandos curl que usaron para probar, con sus respuestas
+- `curl.png` — captura del `curl` usado para crear una reserva de prueba
+- `ps.png` — captura de `docker compose ps` mostrando los servicios levantados correctamente
+
+![Curl de prueba](./curl.png)
+
+![Servicios levantados](./ps.png)
+
 
 ## Opcionales (suman si están)
 

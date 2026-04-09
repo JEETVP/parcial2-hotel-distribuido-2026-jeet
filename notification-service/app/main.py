@@ -26,31 +26,35 @@ logger = logging.getLogger("notification-service")
 RABBITMQ_URL = os.getenv("RABBITMQ_URL", "amqp://guest:guest@rabbitmq:5672/")
 
 
+def callback(ch, method, properties, body):
+    payload = json.loads(body)
+    logger.info(
+        "[NOTIFICATION] booking_id=%s event=%s guest=%s channel=email status=SENT",
+        payload["booking_id"],
+        payload["event"],
+        payload["guest"],
+    )
+    ch.basic_ack(delivery_tag=method.delivery_tag)
+
+
 def main() -> None:
     params = pika.URLParameters(RABBITMQ_URL)
     connection = pika.BlockingConnection(params)
     channel = connection.channel()
 
-    # TODO 1: declarar el exchange 'hotel' (tipo topic) y bindear una queue
-    # llamada 'notifications' a los routing keys 'payment.completed' y
-    # 'payment.failed'. Recuerda que un binding va de exchange → queue con
-    # un routing key específico, y puedes hacer dos bindings sobre la misma
-    # queue.
+    channel.exchange_declare(exchange="hotel", exchange_type="topic")
+    result = channel.queue_declare(queue="notifications", durable=False)
+    channel.queue_bind(exchange="hotel", queue=result.method.queue, routing_key="payment.completed")
+    channel.queue_bind(exchange="hotel", queue=result.method.queue, routing_key="payment.failed")
 
-    # TODO 2: implementar el callback que reciba (ch, method, properties, body),
-    # parsee el JSON, y loggee con el formato exacto:
-    #   [NOTIFICATION] booking_id=<id> event=<EVENT> guest=<name> channel=email status=SENT
-    # No olvides hacer ack manual al final del callback (ch.basic_ack).
+    channel.basic_consume(
+        queue=result.method.queue,
+        on_message_callback=callback,
+        auto_ack=False,
+    )
 
-    # TODO 3: iniciar el consumer con channel.basic_consume(...) usando ack
-    # manual y luego channel.start_consuming().
-
-    logger.info("notification-service iniciado, pero los TODOs no están resueltos todavía")
-    # Mientras los TODOs no se resuelvan, este servicio no consume nada.
-    # Reemplaza este loop infinito con tu lógica.
-    import time
-    while True:
-        time.sleep(60)
+    logger.info("notification-service esperando eventos de pago...")
+    channel.start_consuming()
 
 
 if __name__ == "__main__":
