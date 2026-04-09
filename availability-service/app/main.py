@@ -1,4 +1,4 @@
-"""availability-service – consumer que valida disponibilidad y crea reservas."""
+"""availability-service - consumer que valida disponibilidad y crea reservas."""
 
 import json
 import logging
@@ -16,40 +16,32 @@ logger = logging.getLogger("availability-service")
 RABBITMQ_URL = os.getenv("RABBITMQ_URL", "amqp://guest:guest@rabbitmq:5672/")
 
 
-def find_available_room(room_type: str, check_in: date, check_out: date) -> Room | None:
-    """Busca una habitación del tipo solicitado libre en el rango dado.
+def find_available_room(session, room_type: str, check_in: date, check_out: date) -> Room | None:
+    """Busca una habitacion del tipo solicitado libre en el rango dado.
 
-    Devuelve la primera habitación disponible o None si ninguna lo está.
+    Devuelve la primera habitacion disponible o None si ninguna lo esta.
     """
-    with SessionLocal() as session:
-        candidates = session.query(Room).filter(Room.room_type == room_type).all()
-        for room in candidates:
-            # BUG: la lógica de overlap está incompleta. Solo compara check_in
-            # de las reservas existentes contra el check_in nuevo. Si una
-            # reserva existe del 1 al 10 y entra una nueva del 5 al 15,
-            # esta función dice "está libre" cuando NO lo está.
-            #
-            # Lo correcto: dos rangos [a1, a2] y [b1, b2] se solapan cuando
-            # a1 < b2 AND a2 > b1. Reescribe el filtro de abajo aplicando
-            # esa regla en SQL.
-            #
-            # BUG: además falta with_for_update() para prevenir race condition.
-            # Si dos consumers leen al mismo tiempo, ambos pueden ver la
-            # habitación libre y ambos insertan una reserva. El patrón correcto
-            # es bloquear las filas relevantes dentro de la transacción.
-            conflicts = (
-                session.query(Booking)
-                .filter(
-                    Booking.room_id == room.id,
-                    Booking.status == "CONFIRMED",
-                    Booking.check_in < check_out,
-                    Booking.check_out > check_in,
-                )
-                .all()
+    candidates = (
+        session.query(Room)
+        .filter(Room.room_type == room_type)
+        .with_for_update()
+        .all()
+    )
+    for room in candidates:
+        conflicts = (
+            session.query(Booking)
+            .filter(
+                Booking.room_id == room.id,
+                Booking.status == "CONFIRMED",
+                Booking.check_in < check_out,
+                Booking.check_out > check_in,
             )
-            if not conflicts:
-                return room
-        return None
+            .with_for_update()
+            .all()
+        )
+        if not conflicts:
+            return room
+    return None
 
 
 def process_booking(payload: dict) -> tuple[bool, str, int | None]:
@@ -59,7 +51,7 @@ def process_booking(payload: dict) -> tuple[bool, str, int | None]:
     check_out = date.fromisoformat(payload["check_out"])
 
     with SessionLocal() as session:
-        room = find_available_room(room_type, check_in, check_out)
+        room = find_available_room(session, room_type, check_in, check_out)
         if room is None:
             logger.info("Reserva %s rechazada: sin habitaciones %s", booking_id, room_type)
             return False, f"No hay habitaciones {room_type} disponibles", None
@@ -74,7 +66,7 @@ def process_booking(payload: dict) -> tuple[bool, str, int | None]:
         )
         session.add(booking)
         session.commit()
-        logger.info("Reserva %s confirmada en habitación %s", booking_id, room.room_number)
+        logger.info("Reserva %s confirmada en habitacion %s", booking_id, room.room_number)
         return True, "", room.id
 
 
