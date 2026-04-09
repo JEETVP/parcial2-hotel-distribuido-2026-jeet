@@ -30,13 +30,13 @@ async def create_booking(body: BookingIn):
     booking_id = str(uuid.uuid4())
     now = datetime.now(timezone.utc).isoformat()
     logger.info("Nueva reserva %s para %s", booking_id, body.guest)
-
+    #estructura con try/except para proteger el flujo de errores
     r = get_redis()
     try:
         await r.hset(
             f"booking:{booking_id}",
             mapping={"status": "REQUESTED", "last_update": now},
-        )
+        )#recibe en redis y lo guarda con un estado REQUESTED
 
         payload = {
             "booking_id": booking_id,
@@ -44,20 +44,20 @@ async def create_booking(body: BookingIn):
             "room_type": body.room_type,
             "check_in": body.check_in.isoformat(),
             "check_out": body.check_out.isoformat(),
-        }
+        } #Genera el payload con el cual se va a enviar a rabbitMQ
 
         try:
-            await publish_booking(payload)
+            await publish_booking(payload) #En vez de mandar directamente el 200 en RabbitMQ gestiona en caso de error
         except Exception:
             logger.exception("Fallo al publicar la reserva %s en RabbitMQ", booking_id)
-            raise HTTPException(
+            raise HTTPException( #Utiliza error de tipo 503 y muestra el error en los logs para que sean visibles para el usuario
                 status_code=503,
                 detail="No se pudo procesar la reserva en este momento. Intenta de nuevo.",
             )
 
         return BookingCreated(booking_id=booking_id, status="REQUESTED")
     finally:
-        await r.aclose()
+        await r.aclose() # si logro publicar en rabbitMQ, regresa booking created y cierra conexión con redis.
 
 
 @app.get("/bookings/{booking_id}", response_model=BookingStatus)
