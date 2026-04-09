@@ -1,5 +1,5 @@
 services:
-  # ── Base de datos ──────────────────────────────────────────
+  # Base de datos
   postgres:
     image: postgres:16-alpine
     environment:
@@ -13,7 +13,7 @@ services:
       interval: 5s
       retries: 5
 
-  # ── Caché de estado ────────────────────────────────────────
+  # Cache de estado
   redis:
     image: redis:7-alpine
     healthcheck:
@@ -21,7 +21,7 @@ services:
       interval: 5s
       retries: 5
 
-  # ── Message broker ─────────────────────────────────────────
+  # Message broker
   rabbitmq:
     image: rabbitmq:3-management
     ports:
@@ -32,7 +32,7 @@ services:
       interval: 10s
       retries: 5
 
-  # ── API pública (booking-api) ──────────────────────────────
+  # API publica (booking-api)
   booking-api:
     build: ./booking-api
     env_file: .env
@@ -44,7 +44,7 @@ services:
       rabbitmq:
         condition: service_healthy
 
-  # ── Validación y reservas (availability-service) ───────────
+  # Validacion y reservas (availability-service)
   availability-service:
     build: ./availability-service
     env_file: .env
@@ -55,7 +55,7 @@ services:
       rabbitmq:
         condition: service_healthy
 
-  # ── Procesamiento de pagos (payment-service) ───────────────
+  # Procesamiento de pagos (payment-service)
   payment-service:
     build: ./payment-service
     env_file: .env
@@ -66,9 +66,14 @@ services:
       rabbitmq:
         condition: service_healthy
 
-  # NOTA: notification-service NO está aquí. Tú debes agregarlo
-  # como parte del Tier 1. Mira la carpeta notification-service/
-  # y replica el patrón de los otros servicios.
+  # Notificaciones (notification-service)
+  notification-service:
+    build: ./notification-service
+    env_file: .env
+    restart: on-failure
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
 
 volumes:
   pg_data:
