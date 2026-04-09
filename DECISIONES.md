@@ -40,7 +40,15 @@ Era un problema porque si el servicio fallaba mientras procesaba, el mensaje ya 
 
 ### B6 — Credenciales en env vars
 
----
+Qué encontré:
+Las credenciales estaban expuestas en la database_url, por lo que no se pueden cambiar sin modificar el codigo y estan harcodeadadas
+
+Cómo lo arregle:
+Los valores ahora al tenerlos cómo variables string separadas provienen desde el entorno, permitiendo qué puedan ser configurables, y escalables en diferentes de entornos de producción, pudiendo obtener los valores de otros envs qué pueden ser protegidos con un gitignore.
+
+Por qué esto era un problema:
+Es un problema por qué al tener la URL de base de datos, se puede generar acceso a información sensible, y podría haber robo o borrado de información, generando riesgos de mal uso del sistema.
+
 
 ## notification-service completado
 
