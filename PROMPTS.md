@@ -52,6 +52,20 @@ Listen los 3-5 prompts más importantes que escribieron y para qué los usaron.
 **Quien lo usó:**Anton Betak Licea
 **Qué tan útil fue:** 5
 
+6. **Prompt: EN mi servicio de reservas, necesito implementar operaciones serializadas de amanera que no generen solicitudes concurrentes y dupliquen las reservas. Que metodo me conviene insertar para aumentar la seguridad, un bloqueo exclusivo, un select for update o como lo estructurarias, asegurando que las operaciones esten protegidas.**
+**Observar diferentes enfoques de solución a un mismo problema para poder comprender la lógica del problema y decidir una solución **
+**Quien lo usó:**Roberto Villegas Ojeda
+**Qué tan útil fue:** 5
+
+7. **Prompt: En que parte tengo que declarar una nueva routing_key para mi servicio de reservaciones, actualmente mi servicio utliza una routing_key en el booking, pero esa solo tiene dos opciones para el caso de booking_succes y booking_failed. Necesito configurar una nueva opcion desde cero, describeme los bloques y funciones que deberia considerar en mi implementacion.**
+**Observar diferentes enfoques de solución a un mismo problema para poder comprender la lógica del problema y decidir una solución **
+**Quien lo usó:**Roberto Villegas Ojeda
+**Qué tan útil fue:** 5
+
+
+
+
+
 
 ### ¿En qué partes los apoyó?
 La IA nos ayudó sobre todo para resolver dudas puntuales, entender algunos errores y orientarnos con pruebas en terminal. También nos sirvió para aclarar mejor temas como overlap, idempotencia, RabbitMQ y tests y tambien en algunas partes donde no sabiamos la raiz del problema ni donde encontrar el problema entre tantos archivos.
