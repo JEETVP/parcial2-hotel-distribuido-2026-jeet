@@ -54,9 +54,7 @@ Se corrigieron bugs importantes en booking-api con su key, availability-service 
 
 
 ### Lo que hizo Integrante 2
-
-
----
+Corregi el error de publicación en rabbitMQ, con un try/except, separe y elimine las variables expuestas de la base de datos en postgres haciendolas escalables para diferentes entornos de producción,y volvi la operación de reserva de las habitaciones atómica, unificando la inserción y consulta de datos, protegiendo de reservas duplicadas, al igual que incorporando un servicio de cancelación de reservas y manejo conjunto de cancelación de reservas en caso de fallo en el pago.
 
 ## Notas sobre el trabajo en pareja
 
