@@ -133,3 +133,5 @@ Se trató de hacer todo lo que está en instrucciones, gracias a nuestra organiz
 ---
 
 ## Si tuviera más tiempo, lo siguiente que mejoraría sería:
+
+Si tuviera más tiempo, ademas de mejorar con más pytest en el sistema, agregaria una interfaz web sencilla para consultar el estado de las reservas sin depender de curl o de los logs y hacer más facil la interacción tanto para el cliente como para el programador. 
