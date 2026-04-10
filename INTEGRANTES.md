@@ -25,19 +25,23 @@
 | Bug / Tarea | Responsable principal | Apoyo |
 |---|---|---|
 | B1 — routing key en booking-api |Anton | Roberto|
-| B2 — manejo de error en publish | | |
-| B3 — auto_ack en availability-service | | |
-| B4 — overlap de fechas | | |
-| B5 — race condition con `with_for_update()` | | |
-| B6 — credenciales hardcodeadas | | |
-| B7 — idempotencia en payment-service | | |
-| `notification-service` (TODOs) | | |
-| `notification-service` en docker-compose | | |
-| Capturas de RabbitMQ | | |
-| Logs end-to-end | | |
-| `DECISIONES.md` | | |
-| `PROMPTS.md` | | |
+| B2 — manejo de error en publish |Roberto | Anton|
+| B3 — auto_ack en availability-service |Anton |Roberto |
+| B4 — overlap de fechas |Anton |
+| B5 — race condition con `with_for_update()` |Roberto |Anton|
+| B6 — credenciales hardcodeadas |Roberto |Anton |
+| B7 — idempotencia en payment-service |Anton |Roberto |
+| `notification-service` (TODOs) |Roberto |Anton |
+| `notification-service` en docker-compose |Roberto |Anton |
+| Capturas de RabbitMQ |Roberto |Anton |
+| Logs end-to-end |Anton| |
+| `DECISIONES.md` |Anton | |
+| `PROMPTS.md` |Anton | |
 | (otro) | | |
+Bonus: 
+Saga compensatoria: Roberto
+Tests, observabilidad, mejoras: Anton
+
 
 ---
 
@@ -46,6 +50,7 @@
 > Llenen esto al terminar. Una o dos frases por integrante explicando qué cosas hicieron principalmente. La idea no es competir, es que quede claro que ambos participaron.
 
 ### Lo que hizo Integrante 1
+Se corrigieron bugs importantes en booking-api con su key, availability-service ahora valida correctamente la disponibilidad, payment-service evita la duplicación de cobros, se documentaron decisiones y logs para un mejor entendimiento del programa y a su vez se hizo un bonus con "test" el cual ayuda a probar y ahorrar tiempo
 
 
 ### Lo que hizo Integrante 2
@@ -56,3 +61,5 @@
 ## Notas sobre el trabajo en pareja
 
 (Opcional) ¿Hubo algo difícil de coordinar? ¿Mejoras al flujo de trabajo en pareja para la próxima vez?
+
+-Todo muy bien, sentimos que tenemos muy buena coordinación como pareja ya que hemos trabajado anteriormente en otros proyectos tanto escolares como personales, entonces para nosotros no hubo ningun tipo de problema, unicamente en los tiempos, ya que cuando trabajamos cada quien por su cuenta evitamos hacer push para evitar errores de merge. 

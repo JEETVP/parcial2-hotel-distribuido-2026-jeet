@@ -16,6 +16,11 @@ logger = logging.getLogger("availability-service")
 RABBITMQ_URL = os.getenv("RABBITMQ_URL", "amqp://guest:guest@rabbitmq:5672/")
 
 
+def date_ranges_overlap(start_a: date, end_a: date, start_b: date, end_b: date) -> bool:
+    """Devuelve True cuando dos rangos [start, end) se solapan."""
+    return start_a < end_b and end_a > start_b
+
+
 def find_available_room(session, room_type: str, check_in: date, check_out: date) -> Room | None:
     """Busca una habitacion del tipo solicitado libre en el rango dado.
 

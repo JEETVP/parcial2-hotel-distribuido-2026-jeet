@@ -87,6 +87,16 @@ curl -X POST http://localhost:8000/bookings \
 
 UI de RabbitMQ en `http://localhost:15672` (usuario: `guest`, password: `guest`).
 
+## Bonus y validacion
+
+Se agregaron tests con `pytest`  para validar de forma aislada sin depender del broker o de la base de datos.
+
+Para correrlos:
+
+```bash
+python -m pytest availability-service/tests
+```
+
 ## ¿Por dónde empiezan?
 
 1. Lean este archivo (ya lo están haciendo, ¡bien!)

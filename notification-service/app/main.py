@@ -1,4 +1,4 @@
-"""notification-service – consumer que loggea notificaciones de pago.
+"""notification-service  consumer que loggea notificaciones de pago.
 
 ESTE SERVICIO ESTÁ INCOMPLETO. Tu trabajo es resolver los TODOs de abajo.
 

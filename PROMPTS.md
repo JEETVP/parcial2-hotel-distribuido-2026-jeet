@@ -47,17 +47,23 @@ Listen los 3-5 prompts más importantes que escribieron y para qué los usaron.
 **Quien lo usó:**Anton Betak Licea
 **Qué tan útil fue:** 4
 
+5. **Prompt: Le pregunté que era un test, como podia agregarlo al proyecto y para que me servia en la parte de validacion de fechas y si me recomendaba usarlo ahi sobre otras partes del codigo **
+**Entender como usar el pytest para comprobar automaticamente la lógica de overlap en availability-service y poder optimizar trabajo**
+**Quien lo usó:**Anton Betak Licea
+**Qué tan útil fue:** 5
+
 
 ### ¿En qué partes los apoyó?
-(Ej: explicación de `with_for_update()`, generación de boilerplate del notification-service, debugging de un error de aio-pika...)
+La IA nos ayudó sobre todo para resolver dudas puntuales, entender algunos errores y orientarnos con pruebas en terminal. También nos sirvió para aclarar mejor temas como overlap, idempotencia, RabbitMQ y tests y tambien en algunas partes donde no sabiamos la raiz del problema ni donde encontrar el problema entre tantos archivos.
 
 -
 
 ### ¿Hubo cosas en las que la IA dio respuestas incorrectas o que tuvieron que corregir?
-(Ser honestos aquí suma puntos de criterio)
+
+Sí, a veces hubo que aterrizar mejor las respuestas al proyecto, sobre todo al momento de probar en Docker y usar datos que sí sirvieran para validar cada caso.
 
 -
 
 ### ¿Qué decidieron hacer manualmente sin IA y por qué?
-
+Decidimos hacer manualmente la mayor parte de la implementación, las pruebas del sistema, la revisión de logs y la documentación final, porque queríamos entender bien qué estaba pasando en cada servicio y no solo aplicar cambios sin revisarlos. La IA la usamos más como apoyo para dudas puntuales y para orientarnos cuando nos atorábamos.
 -

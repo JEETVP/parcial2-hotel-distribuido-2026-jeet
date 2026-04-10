@@ -115,10 +115,21 @@ POR QUE ERA UN PROBLEMA:
 
 No es un problema, pero limita la experiencia del usuario a solo una opción, y no es tolerante a errores que pueda cometer, por lo que poder revertir el proceso representa un plus en caso de que haya un error. Y en el pago, permite que la reserva pase a cancelada y no solo avise si el pago paso o no, permitiendo una funcionalidad mas completa.
 
+## Bonus pytest
+Que encontré: 
+Encontramos que no habia pruebas automaticas para validar la logica del overlap de fechas en availability-service
+
+Como se arregló:
+Se agregó un test con pytest para comprobar distintos casos de solapamiento entre reservs
+
+por que es un problema: 
+porque sin una prueba automatica era más fácil que esa logica se rompiera sin darnos cuenta
+
+
+
 ## Cosas que decidí NO hacer
 
-(Ej: "no agregué tests porque preferí enfocarme en el flujo end-to-end", "no implementé saga porque no me dio tiempo", etc.)
-
+Se trató de hacer todo lo que está en instrucciones, gracias a nuestra organización el tiempo no fue problema para nosotros.
 ---
 
 ## Si tuviera más tiempo, lo siguiente que mejoraría sería:
