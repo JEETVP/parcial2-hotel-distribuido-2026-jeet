@@ -8,8 +8,11 @@ Suban aquí los siguientes archivos. Sin esta evidencia se pierden puntos de la 
 (`http://localhost:15672`, usuario: guest, password: guest)
 
 - `rabbitmq-exchanges.png` — captura de la pestaña Exchanges mostrando el exchange `hotel`
+![Pestaña de exchanges mostrando hotel](./evidence/exchanges_hotel_rabbitmq.png)
 - `rabbitmq-queues.png` — captura de la pestaña Queues mostrando las queues que su sistema creó (availability.requests, payment.requests, notifications)
+![Queues de hotel en rabbitmq](./evidence/queues_hotel_rabbitmq.png)
 - `rabbitmq-bindings.png` — captura de los bindings de la queue `notifications` (debe mostrar los dos routing keys: `payment.completed` y `payment.failed`)
+![Routing keys de payment completed y failed.](./evidence/notifications_hotel_bindings.png)
 
 ### 2. Logs del flujo end-to-end exitoso
 - `flujo-completo.log` — salida de `docker compose logs` al hacer un `POST /bookings`, mostrando los 4 servicios procesando en cadena
