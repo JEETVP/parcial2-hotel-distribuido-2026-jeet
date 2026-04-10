@@ -52,14 +52,12 @@ Es un problema por qué al tener la URL de base de datos, se puede generar acces
 
 ## notification-service completado
 
-**Qué TODOs había:**
+En docker-compose.yml el notification service no aparecia declarado, por lo que no puede funcionar con Docker.
 
 **Cómo los implementé:**
-
+Reutilice la arquitectura de availability service, solo que como notificatio-service no utiliza base de datos no se coloca en el servicio.
 **Decisiones de diseño que tomé:**
-
----
-
+Es un problema por que no encontraría el host, no aparecería la conexión y rompería el flujo de la aplicación
 ## Bugs arreglados (Tier 2)
 
 ### B4 — Overlap de fechas
